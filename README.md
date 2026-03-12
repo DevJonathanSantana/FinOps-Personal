@@ -7,12 +7,12 @@
 
 Um sistema financeiro pessoal robusto e elegante construído com Python. Desenvolvido com foco em **UI/UX Premium** (Dark Mode vetorial) e **regras de negócio estritas**, garantindo que a matemática do usuário seja sempre fiel à realidade.
 
-> <img width="1863" height="911" alt="image" src="https://github.com/user-attachments/assets/f83346cd-1ce1-4287-aa52-34381307ab9e" />
+<img width="1868" height="878" alt="image" src="https://i.imgur.com/mgCX52O.png" />
 
 
 ---
 
-<img width="1868" height="878" alt="image" src="https://github.com/user-attachments/assets/72515ce2-ddfe-433b-bd99-ccace0561535" />
+<img width="1868" height="878" alt="image" src="https://i.imgur.com/NI6dFDC.png" />
 
 ---
 
@@ -56,11 +56,16 @@ Para garantir a integridade contábil, o sistema possui travas rígidas:
 
 1. Clone o repositório
    git clone [https://github.com/JohnDevCoda/finops-personal.git](https://github.com/JohnDevCoda/finops-personal.git)
+   
     cd finops-personal
-2. Instale as dependênciasCertifique-se de ter o Python 3.10+ instalado.
+   
+3. Instale as dependênciasCertifique-se de ter o Python 3.10+ instalado.
+
     pip install -r requirements.txt
+   
 (O arquivo requirements.txt deve conter as bibliotecas descritas no projeto)
-3. Configure as Variáveis de AmbienteCrie uma pasta chamada .streamlit na raiz do projeto e dentro dela crie um arquivo secrets.toml.
+
+5. Configure as Variáveis de AmbienteCrie uma pasta chamada .streamlit na raiz do projeto e dentro dela crie um arquivo secrets.toml.
 Insira suas credenciais do Supabase:
 
 **Ini, TOML**
