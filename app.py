@@ -60,15 +60,33 @@ if st.session_state.user_id is None:
         if st.session_state.show_forgot_password:
             with st.container(border=True):
                 st.markdown(f'<div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">{ic_lock}<h3 style="margin: 0; color: #f8fafc;">Recuperar Senha</h3></div>', unsafe_allow_html=True)
-                st.info("Digite seu e-mail cadastrado. Se ele existir no sistema, você receberá um link de recuperação.", icon=":material/info:")
+
+                aba1, aba2 = st.tabs(["1. Solicitar Código", "2. Redefinir Senha"])
                 
-                with st.form("form_recover", clear_on_submit=False):
-                    email_rec = st.text_input("Seu E-mail")
-                    if st.form_submit_button("Enviar link de recuperação", use_container_width=True):
-                        from database import recuperar_senha
-                        sucesso, msg = recuperar_senha(email_rec)
-                        if sucesso: st.success(msg, icon=":material/mark_email_read:")
-                        else: st.error(msg, icon=":material/error:")
+                with aba1:
+                    st.info("Digite seu e-mail. Você receberá um código de 6 dígitos.", icon=":material/info:")
+                    with st.form("form_recover", clear_on_submit=False):
+                        email_rec = st.text_input("Seu E-mail cadastrado")
+                        if st.form_submit_button("Enviar Código", use_container_width=True):
+                            from database import recuperar_senha
+                            sucesso, msg = recuperar_senha(email_rec)
+                            if sucesso: st.success(msg, icon=":material/mark_email_read:")
+                            else: st.error(msg, icon=":material/error:")
+                            
+                with aba2:
+                    with st.form("form_reset", clear_on_submit=True):
+                        email_reset = st.text_input("Confirme seu E-mail")
+                        codigo_otp = st.text_input("Código de 6 dígitos (recebido no e-mail)")
+                        nova_senha = st.text_input("Nova Senha", type="password")
+                        if st.form_submit_button("Atualizar Senha", type="primary", use_container_width=True):
+                            from database import redefinir_senha_com_token
+                            suc, m = redefinir_senha_com_token(email_reset, codigo_otp, nova_senha)
+                            if suc:
+                                st.session_state.msg_sucesso = m
+                                st.session_state.show_forgot_password = False
+                                st.rerun()
+                            else:
+                                st.error(m, icon=":material/error:")
                 
                 st.markdown("<br>", unsafe_allow_html=True)
                 if st.button("Voltar para o Login", use_container_width=True):
@@ -84,7 +102,6 @@ if st.session_state.user_id is None:
                     if st.form_submit_button("Criar Conta", use_container_width=True):
                         pode_salvar, user = register_user(email, senha)
                         if pode_salvar:
-                            # Salva a mensagem no estado para sobreviver ao recarregamento de tela
                             st.session_state.msg_sucesso = "Conta criada com sucesso! Faça seu login abaixo."
                             st.session_state.show_register = False
                             st.rerun()

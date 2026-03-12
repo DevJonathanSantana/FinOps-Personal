@@ -73,3 +73,15 @@ def recuperar_senha(email):
         return True, "E-mail de recuperação enviado! Verifique sua caixa de entrada (e o Spam)."
     except Exception as e:
         return False, f"Erro ao enviar: {str(e)}"
+    
+def redefinir_senha_com_token(email, token, nova_senha):
+    try:
+        supabase.auth.verify_otp({"email": email, "token": token, "type": "recovery"})
+        
+        supabase.auth.update_user({"password": nova_senha})
+        
+        supabase.auth.sign_out()
+        
+        return True, "Senha atualizada com sucesso! Faça seu login."
+    except Exception as e:
+        return False, "Código inválido ou expirado. Solicite um novo."
