@@ -33,6 +33,7 @@ if st.session_state.user_id is None:
         [data-testid="stHeader"] {{
             background-color: transparent !important;
         }}
+        
         div[data-testid="stVerticalBlockBorderWrapper"],
         div[data-testid="stForm"] {{
             background-color: #0f172a !important; 
@@ -42,17 +43,14 @@ if st.session_state.user_id is None:
             border: 1px solid #1e293b !important;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
         }}
-    </style>
-    """, unsafe_allow_html=True)
 
-    st.markdown("""
-        <h1 style='text-align: center; font-weight: 1000; letter-spacing: -2px; 
-                   background: -webkit-linear-gradient(45deg, #2dd4bf, #0ea5e9); 
-                   -webkit-background-clip: text; 
-                   -webkit-text-fill-color: transparent; 
-                   margin-bottom: 20px;'>
-            FinOps Personal
-        </h1>
+        div[data-testid="stAlert"] {{
+            background-color: #1e293b !important; 
+            border: 1px solid #334155 !important;
+            color: #cbd5e1 !important; 
+            border-radius: 8px !important;
+        }}
+    </style>
     """, unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 3, 1])
