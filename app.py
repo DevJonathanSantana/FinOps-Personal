@@ -15,6 +15,8 @@ from controllers import (
 # Authentication state management
 if 'user_id' not in st.session_state: st.session_state.user_id = None
 if 'show_register' not in st.session_state: st.session_state.show_register = False
+if 'show_forgot_password' not in st.session_state: st.session_state.show_forgot_password = False
+if 'msg_sucesso' not in st.session_state: st.session_state.msg_sucesso = None
 
 # Auth Routing UI
 if st.session_state.user_id is None:
@@ -55,7 +57,25 @@ if st.session_state.user_id is None:
     
     col1, col2, col3 = st.columns([1, 3, 1])
     with col2:
-        if st.session_state.show_register:
+        if st.session_state.show_forgot_password:
+            with st.container(border=True):
+                st.markdown(f'<div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">{ic_lock}<h3 style="margin: 0; color: #f8fafc;">Recuperar Senha</h3></div>', unsafe_allow_html=True)
+                st.info("Digite seu e-mail cadastrado. Se ele existir no sistema, você receberá um link de recuperação.", icon=":material/info:")
+                
+                with st.form("form_recover", clear_on_submit=False):
+                    email_rec = st.text_input("Seu E-mail")
+                    if st.form_submit_button("Enviar link de recuperação", use_container_width=True):
+                        from database import recuperar_senha
+                        sucesso, msg = recuperar_senha(email_rec)
+                        if sucesso: st.success(msg, icon=":material/mark_email_read:")
+                        else: st.error(msg, icon=":material/error:")
+                
+                st.markdown("<br>", unsafe_allow_html=True)
+                if st.button("Voltar para o Login", use_container_width=True):
+                    st.session_state.show_forgot_password = False
+                    st.rerun()
+
+        elif st.session_state.show_register:
             with st.container(border=True):
                 st.markdown(f'<div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">{ic_user}<h3 style="margin: 0; color: #f8fafc;">Criar Nova Conta</h3></div>', unsafe_allow_html=True)
                 with st.form("form_register", clear_on_submit=False):
@@ -64,7 +84,8 @@ if st.session_state.user_id is None:
                     if st.form_submit_button("Criar Conta", use_container_width=True):
                         pode_salvar, user = register_user(email, senha)
                         if pode_salvar:
-                            st.success("Conta criada! Faça o login agora.", icon=":material/check_circle:")
+                            # Salva a mensagem no estado para sobreviver ao recarregamento de tela
+                            st.session_state.msg_sucesso = "Conta criada com sucesso! Faça seu login abaixo."
                             st.session_state.show_register = False
                             st.rerun()
                         else:
@@ -73,9 +94,14 @@ if st.session_state.user_id is None:
                 if st.button("Voltar para o Login", use_container_width=True):
                     st.session_state.show_register = False
                     st.rerun()
+                    
         else:
             with st.container(border=True):
                 st.markdown(f'<div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">{ic_lock}<h3 style="margin: 0; color: #f8fafc;">Acesso ao Painel</h3></div>', unsafe_allow_html=True)
+                if st.session_state.msg_sucesso:
+                    st.success(st.session_state.msg_sucesso, icon=":material/check_circle:")
+                    st.session_state.msg_sucesso = None 
+                    
                 with st.form("form_login", clear_on_submit=False):
                     email = st.text_input("E-mail")
                     senha = st.text_input("Senha", type="password")
@@ -86,10 +112,17 @@ if st.session_state.user_id is None:
                             st.rerun()
                         else:
                             st.error("E-mail ou senha incorretos.", icon=":material/error:")
+                
                 st.markdown("<br>", unsafe_allow_html=True)
-                if st.button("Não tem conta? Cadastre-se", use_container_width=True):
+                
+                col_btn1, col_btn2 = st.columns(2)
+                if col_btn1.button("Não tem conta?", use_container_width=True):
                     st.session_state.show_register = True
                     st.rerun()
+                if col_btn2.button("Esqueceu a senha?", use_container_width=True):
+                    st.session_state.show_forgot_password = True
+                    st.rerun()
+                    
     st.stop()
 
 # Main Application Initialization
@@ -571,9 +604,7 @@ with st.container(border=True):
                 
                 st.markdown("<hr style='border-color: rgba(51, 65, 85, 0.5); margin: 0;'>", unsafe_allow_html=True)
 
-                # ==========================================
-# 🌟 RODAPÉ PROFISSIONAL (FOOTER)
-# ==========================================
+
 st.markdown("""
     <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(51, 65, 85, 0.4); color: #64748b; font-size: 13px; font-family: sans-serif; padding-bottom: 20px;">
         Desenvolvido por <a href="https://github.com/DevJonathanSantana" target="_blank" style="color: #2dd4bf; text-decoration: none; font-weight: 600;">Jonathan Santana</a><br>

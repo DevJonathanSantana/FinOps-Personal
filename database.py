@@ -66,3 +66,10 @@ def deletar_conta_db(id_conta):
 
 def pagar_fatura_lote_db(lista_ids):
     return supabase.table("financas").update({"status": "Realizado"}).in_("id", lista_ids).execute()
+
+def recuperar_senha(email):
+    try:
+        supabase.auth.reset_password_email(email)
+        return True, "E-mail de recuperação enviado! Verifique sua caixa de entrada (e o Spam)."
+    except Exception as e:
+        return False, f"Erro ao enviar: {str(e)}"
