@@ -351,8 +351,8 @@ def verificar_alertas_vencimento(df, df_contas):
                     
                     if dias_faltantes < 0:
                         # The invoice is already past its due date this month and there are still “Scheduled” debits!
-                        alertas.append({"tipo": "error", "icone": "material/fire", "mensagem": f"A fatura do **{cartao['nome']}** venceu há **{abs(dias_faltantes)} dia(s)**! (Valor: {str_fat})."})
+                        alertas.append({"tipo": "error", "icone": "🔥", "mensagem": f"A fatura do **{cartao['nome']}** venceu há **{abs(dias_faltantes)} dia(s)**! (Valor: {str_fat})."})
                     elif 0 <= dias_faltantes <= 5:
-                        alertas.append({"tipo": "warning", "icone": "material/credit_card", "mensagem": f"A fatura do **{cartao['nome']}** vence em **{dias_faltantes} dia(s)** (Dia {dia_venc:02d}). Pendente: {str_fat}."})
+                        alertas.append({"tipo": "warning", "icone": "💳", "mensagem": f"A fatura do **{cartao['nome']}** vence em **{dias_faltantes} dia(s)** (Dia {dia_venc:02d}). Pendente: {str_fat}."})
                         
     return alertas
