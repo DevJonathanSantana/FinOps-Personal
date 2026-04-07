@@ -318,8 +318,13 @@ else:
 alertas = verificar_alertas_vencimento(df, df_contas)
 if alertas:
     for alerta in alertas:
-        if alerta['tipo'] == 'error': st.error(alerta['mensagem'], icon=alerta['icone'])
-        else: st.warning(alerta['mensagem'], icon=alerta['icone'])
+        texto_completo = f"{alerta['icone']} {alerta['mensagem']}"
+        
+        if alerta['tipo'] == 'error': 
+            st.error(texto_completo)
+        else: 
+            st.warning(texto_completo)
+            
     st.markdown("<br>", unsafe_allow_html=True)
 
 # Key Metrics (Matemática segura contra df vazio)
