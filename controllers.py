@@ -19,7 +19,7 @@ def registrar_novo_lancamento(tipo, forma_pagamento, categoria, data_lancamento,
     else:
         df_realizado = df[df['Status'] == 'Realizado']
         caixinha_atual = (df_realizado[df_realizado['Tipo'] == 'Reserva (Caixinha)']['Valor'].sum() - 
-                          df_realizado[df_realizado['Tipo'] == 'Resgate da Caixinha']['Valor'].sum())
+                        df_realizado[df_realizado['Tipo'] == 'Resgate da Caixinha']['Valor'].sum())
         entradas = df_realizado[df_realizado['Tipo'] == 'Receita (Salário/Entrada)']['Valor'].sum()
         saidas = df_realizado[df_realizado['Tipo'] == 'Despesa (Gasto)']['Valor'].sum()
         faturas = df_realizado[df_realizado['Tipo'] == 'Pagamento de Fatura']['Valor'].sum()
@@ -316,18 +316,18 @@ def verificar_alertas_vencimento(df, df_contas):
     
     if not atrasadas.empty:
         valor_total = atrasadas['Valor'].sum()
-        str_valor = f"R\$ {valor_total:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        alertas.append({"tipo": "error", "icone": ":material/error:", "mensagem": f"Você tem **{len(atrasadas)} conta(s) ATRASADA(S)** (Total: {str_valor})."})
+        str_valor = f"R$ {valor_total:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        alertas.append({"tipo": "error", "icone": "🚨", "mensagem": f"Você tem **{len(atrasadas)} conta(s) ATRASADA(S)** (Total: {str_valor})."})
         
     if not para_hoje.empty:
         valor_hoje = para_hoje['Valor'].sum()
-        str_valor_hoje = f"R\$ {valor_hoje:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        alertas.append({"tipo": "warning", "icone": ":material/warning:", "mensagem": f"Você tem **{len(para_hoje)} conta(s)** vencendo **HOJE** ({str_valor_hoje})."})
+        str_valor_hoje = f"R$ {valor_hoje:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        alertas.append({"tipo": "warning", "icone": "⚠️", "mensagem": f"Você tem **{len(para_hoje)} conta(s)** vencendo **HOJE** ({str_valor_hoje})."})
         
     if not proximos_dias.empty:
         valor_prox = proximos_dias['Valor'].sum()
-        str_valor_prox = f"R\$ {valor_prox:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        alertas.append({"tipo": "warning", "icone": ":material/calendar_today:", "mensagem": f"Fique de olho: **{len(proximos_dias)} conta(s)** vencem nos próximos 5 dias ({str_valor_prox})."})
+        str_valor_prox = f"R$ {valor_prox:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        alertas.append({"tipo": "warning", "icone": "📅", "mensagem": f"Fique de olho: **{len(proximos_dias)} conta(s)** vencem nos próximos 5 dias ({str_valor_prox})."})
 
     if not df_contas.empty:
         for _, cartao in df_contas.iterrows():
